@@ -76,7 +76,7 @@ export function state(command, input) {
       return { items: result.items.length, overlap: result.overlap };
     }
     if (command === 'recommend') {
-      if (!Array.isArray(data.urls) || data.urls.length > 5 || typeof data.run_id !== 'string' || !data.run_id.trim()) throw new Error('Invalid report receipt');
+      if (!Array.isArray(data.urls) || data.urls.length > 10 || typeof data.run_id !== 'string' || !data.run_id.trim()) throw new Error('Invalid report receipt');
       const reportPath = safePath(base, data.report);
       const report = readFileSync(reportPath, 'utf8');
       const urls = new Set(data.urls.map(canonicalUrl));

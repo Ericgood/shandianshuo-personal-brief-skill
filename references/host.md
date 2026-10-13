@@ -42,3 +42,7 @@ Host关闭不会执行，此版本重启只补最近一次错过周期；任务�
 缺工具时保存daily-task.md，提示启用官方Automation tasks或使用有调度能力的宿主，schedule_status=unavailable。别创建第二个任务做演示，别私改配置或安装系统cron绕过。
 
 公开依据：[Schedule工具](https://github.com/deepseek-ai/DeepSeek-Harness/blob/4878cdabd87d4041bdaff61d04c966883b9fd07a/packages/schedule/schedule/src/tools.ts)、[Schedule限制](https://github.com/deepseek-ai/DeepSeek-Harness/blob/4878cdabd87d4041bdaff61d04c966883b9fd07a/packages/schedule/schedule/README.md)、[Skill文件布局](https://github.com/deepseek-ai/DeepSeek-Harness/blob/4878cdabd87d4041bdaff61d04c966883b9fd07a/packages/skill/skill-filesystem/README.md)。升级后重新探测；参考契约不等于这份Skill完成真实桌面端到端验证。
+
+## 原生执行验收
+
+需要验证闪电说接入时，由闪电说助理在自身运行时加载已安装Skill，实际执行授权的数据增量理解、独立选题与原文研究、资料库正文和索引保存回读、推荐账更新。其他Agent可以协助修改Skill、触发、检查与修复；其生成的成品或脚本测试不能冒充闪电说助理已跑通。保留本机运行证据与实际限制，跨日调度另行验证。

@@ -50,3 +50,21 @@ test('recommend only after saved report, retries idempotent, unread stays unknow
     assert.throws(() => state('ingest', '../../../outside.json'));
   } finally { process.chdir(previous); rmSync(root, { recursive: true, force: true }); }
 });
+
+test('ten distinct recommendations are accepted, eleven are rejected without mutating the ledger', () => {
+  const root = mkdtempSync(join(tmpdir(), 'brief-capacity-')); const previous = process.cwd();
+  try {
+    process.chdir(root); mkdirSync('outputs/personal-brief/reports', { recursive: true });
+    const base = 'outputs/personal-brief/';
+    const items = Array.from({ length: 11 }, (_, i) => ({ title: `Article ${i}`, url: `https://example.org/article/${i}` }));
+    writeFileSync(base + 'input.json', JSON.stringify({ items })); state('ingest', 'input.json');
+    writeFileSync(base + 'reports/day.md', items.map(i => `[Read](${i.url})`).join('\n'));
+    const before = readFileSync(base + 'content.json', 'utf8');
+    writeFileSync(base + 'receipt.json', JSON.stringify({ run_id: 'day', report: 'reports/day.md', urls: items.map(i => i.url) }));
+    assert.throws(() => state('recommend', 'receipt.json'), /Invalid report receipt/);
+    assert.equal(readFileSync(base + 'content.json', 'utf8'), before);
+    writeFileSync(base + 'receipt.json', JSON.stringify({ run_id: 'day', report: 'reports/day.md', urls: items.slice(0, 10).map(i => i.url) }));
+    assert.equal(state('recommend', 'receipt.json').recorded, 10);
+    assert.equal(state('status').recommended, 10);
+  } finally { process.chdir(previous); rmSync(root, { recursive: true, force: true }); }
+});
