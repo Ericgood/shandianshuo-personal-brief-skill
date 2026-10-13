@@ -81,13 +81,26 @@ export function state(command, input) {
       const report = readFileSync(reportPath, 'utf8');
       const urls = new Set(data.urls.map(canonicalUrl));
       if (urls.size !== data.urls.length) throw new Error('Duplicate originals');
+      const repeats = new Map();
+      if (data.repeats !== undefined && !Array.isArray(data.repeats)) throw new Error('Invalid repeat receipt');
+      for (const repeat of data.repeats ?? []) {
+        const key = canonicalUrl(repeat.url);
+        if (!urls.has(key) || repeats.has(key)) throw new Error('Invalid repeat URL');
+        if (!['material_update', 'renewed_context', 'user_requested'].includes(repeat.reason)
+          || !['previous_run_id', 'rationale', 'evidence', 'disclosure'].every(k => typeof repeat[k] === 'string' && repeat[k].trim())
+          || !report.includes(repeat.disclosure)) throw new Error('Repeat needs evidence and visible disclosure');
+        repeats.set(key, repeat);
+      }
       for (const key of urls) {
         const item = old.items.find(i => canonicalUrl(i.url) === key);
         if (!item || !report.includes(item.url)) throw new Error('Save report with exact original URL before marking');
-        if (item.recommendations.some(r => r.run_id !== data.run_id)) throw new Error('Original already recommended');
+        if (item.recommendations.some(r => r.run_id === data.run_id)) continue;
+        const previous = item.recommendations.at(-1);
+        if (previous && repeats.get(key)?.previous_run_id !== previous.run_id) throw new Error('Original already recommended; explicit repeat must reference latest exposure');
+        if (!previous && repeats.has(key)) throw new Error('No previous recommendation to repeat');
       }
       for (const item of old.items) if (urls.has(canonicalUrl(item.url))) {
-        if (!item.recommendations.some(r => r.run_id === data.run_id)) item.recommendations.push({ run_id: data.run_id, report: data.report, saved_at: new Date().toISOString(), delivery: 'unconfirmed' });
+        if (!item.recommendations.some(r => r.run_id === data.run_id)) item.recommendations.push({ run_id: data.run_id, report: data.report, saved_at: new Date().toISOString(), delivery: 'unconfirmed', ...(repeats.has(canonicalUrl(item.url)) ? { repeat: repeats.get(canonicalUrl(item.url)) } : {}) });
         item.status = 'recommended';
       }
       atomic(ledger, old);

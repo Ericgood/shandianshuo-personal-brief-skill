@@ -68,3 +68,39 @@ test('ten distinct recommendations are accepted, eleven are rejected without mut
     assert.equal(state('status').recommended, 10);
   } finally { process.chdir(previous); rmSync(root, { recursive: true, force: true }); }
 });
+
+
+test('repeats require latest exposure, evidence and report disclosure; history survives and retry is idempotent', () => {
+  const root = mkdtempSync(join(tmpdir(), 'brief-repeat-')); const previous = process.cwd();
+  try {
+    process.chdir(root); mkdirSync('outputs/personal-brief/reports', { recursive: true });
+    const base = 'outputs/personal-brief/'; const url = 'https://example.org/old-but-useful';
+    writeFileSync(base + 'input.json', JSON.stringify({ items: [{ title: 'Evergreen', url }] })); state('ingest', 'input.json');
+    writeFileSync(base + 'reports/first.md', url);
+    writeFileSync(base + 'receipt.json', JSON.stringify({ run_id: 'first', report: 'reports/first.md', urls: [url] })); state('recommend', 'receipt.json');
+    const firstLedger = readFileSync(base + 'content.json', 'utf8');
+    const first = JSON.parse(firstLedger).items[0].recommendations[0];
+    const repeat = { url, previous_run_id: 'first', reason: 'renewed_context', rationale: 'New task needs the previously explained method', evidence: 'Confirmed new task today', disclosure: 'Revisit: previously recommended in first; new task changes its value today.' };
+    const receipt = { run_id: 'second', report: 'reports/second.md', urls: [url], repeats: [repeat] };
+    writeFileSync(base + 'reports/second.md', url);
+    writeFileSync(base + 'receipt.json', JSON.stringify(receipt));
+    assert.throws(() => state('recommend', 'receipt.json'), /visible disclosure/);
+    assert.equal(readFileSync(base + 'content.json', 'utf8'), firstLedger);
+    writeFileSync(base + 'reports/second.md', url + '\n' + repeat.disclosure);
+    for (const bad of [{ ...repeat, evidence: '' }, { ...repeat, previous_run_id: 'stale' }, { ...repeat, reason: 'not_clicked' }]) {
+      writeFileSync(base + 'receipt.json', JSON.stringify({ ...receipt, repeats: [bad] }));
+      assert.throws(() => state('recommend', 'receipt.json'));
+      assert.equal(readFileSync(base + 'content.json', 'utf8'), firstLedger);
+    }
+    writeFileSync(base + 'receipt.json', JSON.stringify(receipt));
+    state('recommend', 'receipt.json'); state('recommend', 'receipt.json');
+    const item = JSON.parse(readFileSync(base + 'content.json')).items[0];
+    assert.equal(item.recommendations.length, 2);
+    assert.deepEqual(item.recommendations[0], first);
+    assert.equal(item.recommendations[1].repeat.previous_run_id, 'first');
+    assert.equal(item.user_read_status, 'unknown');
+    writeFileSync(base + 'receipt.json', JSON.stringify({ ...receipt, run_id: 'third' }));
+    assert.throws(() => state('recommend', 'receipt.json'), /latest exposure/);
+    assert.equal(JSON.parse(readFileSync(base + 'content.json')).items[0].recommendations.length, 2);
+  } finally { process.chdir(previous); rmSync(root, { recursive: true, force: true }); }
+});
