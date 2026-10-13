@@ -118,7 +118,8 @@ test('custom window and incremental runs preserve edits, duplicate IDs, deletion
     const text = annualHistory('next', delta.run).entries.flatMap(e => e[5]).map(f => f[1]);
     assert.deepEqual(text, ['Changed original', 'New instruction', 'New correction']);
     accept(delta.run);
-    const empty = annualHistory('prepare', '--days', '30', '--end', ending, '--since', delta.run);
+    const empty = annualHistory('prepare', '--end', ending, '--since', delta.run);
+    assert.equal(empty.days, 30);
     assert.equal(empty.records, 0); assert.equal(annualHistory('status', empty.run).noNewText, true);
     assert.equal(annualHistory('status', empty.run).complete, true);
     assert.throws(() => annualHistory('inventory', '--days', '366'));
@@ -135,5 +136,12 @@ test('undated private text is excluded from CLI snapshots unless explicitly sele
     assert.equal(excluded.records, 0); assert.equal(excluded.excluded.undated, 1);
     const included = annualHistory('prepare', '--undated', 'include');
     assert.equal(included.records, 1); assert.equal(included.tiers.undated, 1);
+    const batch = annualHistory('next', included.run);
+    writeFileSync('response.json', JSON.stringify({ hash: batch.hash, endMarker: batch.END_OF_BATCH, coverage: 'complete',
+      assessment: 'Synthetic unknown-date input.', readings: batch.entries.map(e => ({ part: e[0], kind: 'unclear', gist: 'Unknown-date synthetic text.' })),
+      themes: [], selfStatements: [], currentNeeds: [], conflicts: [], excludedObservations: [] }));
+    annualHistory('accept', included.run, '1', 'response.json');
+    const delta = annualHistory('prepare', '--since', included.run);
+    assert.equal(delta.undated, 'include'); assert.equal(delta.records, 0);
   } finally { process.chdir(previous); rmSync(root, { recursive: true, force: true }); }
 });

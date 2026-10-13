@@ -45,6 +45,6 @@ profile.md按模板生成，settings.json记录profile_status和analysis.last_co
 
 ## 增量
 
-prepare --days N --since LAST_COMPLETED_RUN检查旧run完成，比较当前窗口的全部记录指纹，新增/修改完整读取；重复ID用多重集合，不吞第二条。无稳定ID的修改可能表现为移除+新增，仍复核旧证据。无变化零批次，不重算全年。
+prepare --days N --since LAST_COMPLETED_RUN检查旧run完成，比较当前窗口的全部记录指纹，新增/修改完整读取；重复ID用多重集合，不吞第二条。增量命令未显式传--days或--undated时沿用前次选择，不默认扩展授权范围。无稳定ID的修改可能表现为移除+新增，仍复核旧证据。无变化零批次，不重算全年。
 
 removedOrOutsideWindow可能是删除、修改、日期变化或滑出窗口，不能解释成不喜欢。保留旧档案与明确反馈，复核受影响事实，不因滑出365天删除长期兴趣。增量理解和档案合并成功才推进last_completed_run；失败保留旧档案截至时间。

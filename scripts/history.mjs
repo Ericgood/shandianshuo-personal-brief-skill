@@ -195,7 +195,13 @@ function options(args) {
 export function annualHistory(command = 'inventory', ...args) {
   const root = realpathSync(process.cwd());
   if (['inventory', 'prepare'].includes(command)) {
-    const { days, end, since, undated } = options(args);
+    const selected = options(args);
+    if (selected.since) {
+      const previous = openRun(root, selected.since).manifest;
+      if (!args.includes('--days')) selected.days = previous.days ?? 365;
+      if (!args.includes('--undated')) selected.undated = previous.undated ?? 'exclude';
+    }
+    const { days, end, since, undated } = selected;
     const { raw, rows } = load(root);
     const corpus = buildBatches(rows, end, 18000, days, null, undated === 'include');
     let result = corpus;
