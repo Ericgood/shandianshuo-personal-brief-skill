@@ -55,7 +55,7 @@ node <skill-dir>/scripts/history.mjs status RUN
 
 ## 每日推荐与增量
 
-读[每日研究和状态](references/daily.md)。每次读最新明确反馈和profile完整语义正文；仅在争议时追溯相关证据，不给每篇文章重复塞全年原文。
+读[每日研究和状态](references/daily.md)及[增量采集、事件去重与反馈校准](references/collection-and-calibration.md)。每次读最新明确反馈和profile完整语义正文；仅在争议时追溯相关证据，不给每篇文章重复塞全年原文。分频道保存实际读取回执，区分完整窗口与部分可见；先确定原文/事件新增价值再编排，用真实用户反馈校准，缺失评价保持未知。
 
 已有run及档案都完成时，每日用 `history.mjs prepare --days N --since LAST_COMPLETED_RUN` 比较窗口内全部记录，覆盖新增、修改和重复ID，逐批完整理解，不只抽今天/昨天或关键词。完成近期需要和候选证据合并才推进last_completed_run；这不表示每天重写稳定偏好。增量未完成则保留旧完整档案与截至日期，先恢复分析，不声称已同步。删除/滑出窗口要复核旧证据，不因过期就删长期兴趣。
 
