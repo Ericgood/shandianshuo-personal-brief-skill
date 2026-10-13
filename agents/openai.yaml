@@ -1,0 +1,4 @@
+interface:
+  display_name: "闪电说个人信息推荐"
+  short_description: "完整理解授权转写，建立可纠正偏好，并从原作者内容持续筛选每日推荐"
+  default_prompt: "使用 $shandianshuo-personal-brief，完整分析我指定时间范围的闪电说转写，建立偏好文档并安排每日推荐。"

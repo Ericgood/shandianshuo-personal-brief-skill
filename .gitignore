@@ -1,0 +1,11 @@
+# Only the reusable skill belongs in this repository. User state stays elsewhere.
+outputs/
+history/
+library/
+private/
+.env
+.env.*
+*.log
+.DS_Store
+node_modules/
+*.tmp
