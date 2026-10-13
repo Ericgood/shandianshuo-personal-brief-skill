@@ -23,7 +23,7 @@ set_product_setting({action:"skill_enabled",name:"shandianshuo-personal-brief",e
 
 ## 原生资料库
 
-完整偏好写入library/个人信息偏好.md，使用受支持文件工具保存后核实资料库列表和正文。它是可查看、可纠正的权威档案；不要放进USER.md或MEMORY.md来替代完整正文，也不在outputs再维护一份会分叉的profile。settings.profile.path保存路径，日报、分析审计和去重账仍在outputs；需要在资料库查看日报时可另存原文链接索引，不复制私人原始转写。
+完整偏好写入library/个人信息偏好.md，使用受支持文件工具保存后核实资料库列表和正文。它是可查看、可纠正的权威档案；不要放进USER.md或MEMORY.md来替代完整正文，也不在outputs再维护一份会分叉的profile。settings.profile.path保存路径。每份完整日报正文必须同时在原生资料库library/每日信息推荐-YYYY-MM-DD.md可读，更新library/每日信息推荐.md可点击索引并回读验证；outputs保留对应审计版本、分析审计和去重账。不把私人原始转写复制进日报。
 
 ## Schedule是可选能力
 

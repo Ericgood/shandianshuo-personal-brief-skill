@@ -67,7 +67,7 @@ state输入路径相对于outputs/personal-brief；原文从多个源出现会�
 
 阅读后用文件工具更新对应item的body_read_scope/status=researched及事件判断；先读当前账、原子保存，不能和helper并发写。正文指纹可作为转载线索，但HTML模板、菜单和重复展示会污染指纹，不能凭整个页面哈希断言文章相同。
 
-报告先保存reports/DATE.md，保留已有用户编辑；同日重跑用run后缀。再写receipt.json：
+报告先保存reports/DATE.md审计版本，同时将完整正文保存到原生资料库library/每日信息推荐-DATE.md，并更新library/每日信息推荐.md可点击索引；回读核实正文与索引后才记推荐账。保留已有用户编辑；同日重跑用run后缀。资料库保存失败时不声称完整交付、不推进已推荐状态。再写receipt.json：
 
 ```json
 {"run_id":"实际唯一run","report":"reports/DATE.md","urls":["https://example.org/article"]}
