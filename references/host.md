@@ -21,6 +21,10 @@ set_product_setting({action:"skill_enabled",name:"shandianshuo-personal-brief",e
 
 常见文件工具为read(file_path,offset,limit)、write(file_path,content)、edit(file_path,old_string,new_string,replace_all)，执行工具按平台为bash/pwsh等，以真实schema为准。命令cwd为工作区；脚本路径为实际Skill目录，正确引用带空格路径。Node.js 20+是helper依赖，没有时报告缺口或使用经验证等价能力，不自动装依赖。
 
+## 原生资料库
+
+完整偏好写入library/个人信息偏好.md，使用受支持文件工具保存后核实资料库列表和正文。它是可查看、可纠正的权威档案；不要放进USER.md或MEMORY.md来替代完整正文，也不在outputs再维护一份会分叉的profile。settings.profile.path保存路径，日报、分析审计和去重账仍在outputs；需要在资料库查看日报时可另存原文链接索引，不复制私人原始转写。
+
 ## Schedule是可选能力
 
 当前官方Automation tasks插件提供：

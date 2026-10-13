@@ -1,8 +1,8 @@
 使用已安装的 shandianshuo-personal-brief Skill，在 {{WORKSPACE_ROOT}} 执行个人信息增量理解、源头筛选与每日推荐。调度选择为 {{LOCAL_TIME}} / {{IANA_TIMEZONE}}，实际运行先确认真实时间。
 
-读取 {{SKILL_DIR}}/SKILL.md 和 references/daily.md。所有私人状态只保存在 outputs/personal-brief/，当前设置来自settings.json，不读取应用凭据或额外调用付费模型。
+读取 {{SKILL_DIR}}/SKILL.md 和 references/daily.md。偏好权威正文在原生资料库library/个人信息偏好.md（以settings.profile.path为准），每日和每周均维护同一文档；分析批次、去重账及日报保存在outputs/personal-brief/，当前设置来自settings.json，不读取应用凭据或额外调用付费模型。
 
-先防止同目的运行并发，读取最新明确反馈与profile.md完整语义正文，检查profile_status、已完成分析run和覆盖审计。范围为settings中的reference_days。未完成分析则续读同一run并记录进度，不冒充已全量理解。完成档案存在时，用history.mjs --since比较上次成功处理后授权范围内全部新增/修改文字；逐批完整理解后每日更新近期需要和新观察候选，保留证据，并复核删除/滑出窗口的旧证据。增量失败保留旧档案和截至时间。
+先防止同目的运行并发，读取最新明确反馈与settings.profile.path所指的资料库偏好文档完整语义正文，检查profile_status、已完成分析run和覆盖审计。范围为settings中的reference_days。未完成分析则续读同一run并记录进度，不冒充已全量理解。完成档案存在时，用history.mjs --since比较上次成功处理后授权范围内全部新增/修改文字；逐批完整理解后每日更新近期需要和新观察候选，保留证据，并复核删除/滑出窗口的旧证据。增量失败保留旧档案和截至时间。
 
 执行三层更新：稳定偏好每7天谨慎复盘，近期需要每日更新，新观察先留候选证据、不自动升级。本人明确纠正、身份变化和喜恶立即生效。检查距settings的profile.stable_reviewed_at是否满7天，到期则结合既有跨期理解及上次复盘后全部已读归纳/候选证据，在本轮完成复盘，不另建周任务。稳定层和复盘记录都保存成功才更新该时间，近期层更新不冒充复盘；漏跑补齐全部未处理证据，不只取最近7天。
 

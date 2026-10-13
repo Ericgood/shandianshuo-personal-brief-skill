@@ -41,7 +41,7 @@ accept的RESPONSE_FILE是工作区相对路径，如 `outputs/personal-brief/ana
 
 写analysis/RUN/coverage.json，含run、记录/片段/批次总数和接受数、各层归纳覆盖范围、实际模型/接收方、完成时间与局限。分别说明原文与归纳的阅读，不能把“主Agent复核全部笔记”说成主Agent独自重读所有原文。
 
-profile.md按模板生成，settings.json记录profile_status和analysis.last_completed_run。首次完整建档同时初始化profile.recent_updated_at、profile.stable_reviewed_at；把稳定偏好、近期需要、新观察候选分开，再在各项保留远中近期证据。未合并笔记也算未完成。零批次complete只表示无待处理结构，空历史不证明了解用户。
+library/个人信息偏好.md按模板生成，settings.json记录profile_status和analysis.last_completed_run。首次完整建档同时初始化profile.recent_updated_at、profile.stable_reviewed_at；把稳定偏好、近期需要、新观察候选分开，再在各项保留远中近期证据。未合并笔记也算未完成。零批次complete只表示无待处理结构，空历史不证明了解用户。
 
 ## 增量
 
