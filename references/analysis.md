@@ -41,10 +41,10 @@ accept的RESPONSE_FILE是工作区相对路径，如 `outputs/personal-brief/ana
 
 写analysis/RUN/coverage.json，含run、记录/片段/批次总数和接受数、各层归纳覆盖范围、实际模型/接收方、完成时间与局限。分别说明原文与归纳的阅读，不能把“主Agent复核全部笔记”说成主Agent独自重读所有原文。
 
-profile.md按模板生成，settings.json记录profile_status和analysis.last_completed_run。未合并笔记也算未完成。零批次complete只表示无待处理结构，空历史不证明了解用户。
+profile.md按模板生成，settings.json记录profile_status和analysis.last_completed_run。首次完整建档同时初始化profile.recent_updated_at、profile.stable_reviewed_at；把稳定偏好、近期需要、新观察候选分开，再在各项保留远中近期证据。未合并笔记也算未完成。零批次complete只表示无待处理结构，空历史不证明了解用户。
 
 ## 增量
 
 prepare --days N --since LAST_COMPLETED_RUN检查旧run完成，比较当前窗口的全部记录指纹，新增/修改完整读取；重复ID用多重集合，不吞第二条。增量命令未显式传--days或--undated时沿用前次选择，不默认扩展授权范围。无稳定ID的修改可能表现为移除+新增，仍复核旧证据。无变化零批次，不重算全年。
 
-removedOrOutsideWindow可能是删除、修改、日期变化或滑出窗口，不能解释成不喜欢。保留旧档案与明确反馈，复核受影响事实，不因滑出365天删除长期兴趣。增量理解和档案合并成功才推进last_completed_run；失败保留旧档案截至时间。
+removedOrOutsideWindow可能是删除、修改、日期变化或滑出窗口，不能解释成不喜欢。保留旧档案与明确反馈，复核受影响事实，不因滑出365天删除长期兴趣。每日把全部增量语义合并进近期需要/候选证据，成功才推进last_completed_run与recent_updated_at；稳定层按daily.md每7天复盘，明确纠正立即处理。近期合并不能顺便标记稳定复盘完成；失败保留原层的截至时间。
