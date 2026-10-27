@@ -50,6 +50,8 @@
 
 ## 安装者与开发者
 
+换电脑或交接已有实例时，先读[换机与接续运行](docs/MIGRATION.md)。GitHub 只恢复通用 Skill，私人工作区、成功基线、历史推荐和真实调度需分别迁移并验收。
+
 仓库根本身就是技能目录，包含SKILL.md、references、assets和scripts。闪电说用受支持文件工具放到 `library/skills/shandianshuo-personal-brief/` 后确认启用；不要修改私有状态文件。其他宿主放入其技能目录。脚本cwd是用户工作区，脚本路径是安装目录，二者可不同。
 
 ```text
